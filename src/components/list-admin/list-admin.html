@@ -1,0 +1,141 @@
+<div class="list-admin-page">
+
+  <!-- Header -->
+  <header class="page-header">
+    <div>
+      <div class="page-title-row">
+        <h1 class="page-title">Admin Management</h1>
+        <span class="count-chip">{{ admins.length }} admins</span>
+      </div>
+      <p class="page-sub">Manage system administrators and permissions</p>
+    </div>
+    <button class="btn btn-primary btn-md" (click)="addAdmin()">
+      <lucide-icon name="plus" [size]="16" color="#FFFFFF"></lucide-icon>
+      Add Admin
+    </button>
+  </header>
+
+  <!-- Alerts -->
+  <div *ngIf="successMessage" class="alert-banner alert-success">
+    <lucide-icon name="check-circle-2" [size]="16" color="#059669"></lucide-icon>
+    <span>{{ successMessage }}</span>
+    <button class="alert-close" (click)="clearMessages()"><lucide-icon name="x" [size]="14"></lucide-icon></button>
+  </div>
+  <div *ngIf="errorMessage" class="alert-banner alert-error">
+    <lucide-icon name="alert-triangle" [size]="16" color="#DC2626"></lucide-icon>
+    <span>{{ errorMessage }}</span>
+    <button class="alert-close" (click)="clearMessages()"><lucide-icon name="x" [size]="14"></lucide-icon></button>
+  </div>
+
+  <!-- Delete Modal -->
+  <div *ngIf="showDeleteModal" class="modal-backdrop" (click)="cancelDelete()">
+    <div class="modal-panel" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
+      <div class="modal-delete-icon">
+        <lucide-icon name="trash-2" [size]="24" color="#DC2626"></lucide-icon>
+      </div>
+      <h3 class="modal-title">Delete Admin Account</h3>
+      <p class="modal-body">This will permanently delete <strong>{{ adminToDelete?.Fullname }}</strong>'s account. Type <strong>DELETE</strong> to confirm.</p>
+      <div class="modal-input-wrap">
+        <input type="text" class="form-input" placeholder="Type DELETE to confirm"
+               [(ngModel)]="deleteConfirmation"
+               (ngModelChange)="onDeleteConfirmationChange($event)"
+               [class.input-error]="deleteConfirmation && deleteConfirmation !== 'DELETE'" />
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-md" (click)="cancelDelete()">Cancel</button>
+        <button class="btn btn-destructive btn-md" (click)="confirmDelete()"
+                [disabled]="isDeleting || deleteConfirmation !== 'DELETE'">
+          <lucide-icon *ngIf="isDeleting" name="loader-2" [size]="15" class="icon-spin"></lucide-icon>
+          {{ isDeleting ? 'Deleting…' : 'Delete Admin' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search & Filter -->
+  <div class="toolbar">
+    <div class="input-wrap search-input-wrap">
+      <span class="input-icon-left"><lucide-icon name="search" [size]="16" color="#94A3B8"></lucide-icon></span>
+      <input type="text" class="form-input has-icon-left" placeholder="Search by name, email or role…"
+             [(ngModel)]="searchTerm" (input)="onSearch()" />
+    </div>
+    <select class="form-input form-select role-select" [(ngModel)]="roleFilter" (change)="onFilterChange()">
+      <option value="">All Roles</option>
+      <option value="admin">Admin</option>
+      <option value="super_admin">Super Admin</option>
+    </select>
+  </div>
+
+  <!-- Skeleton loading -->
+  <div *ngIf="isLoading" class="skeleton-wrap">
+    <div class="skeleton skeleton-row" *ngFor="let i of [1,2,3,4,5]"></div>
+  </div>
+
+  <!-- Table -->
+  <div *ngIf="!isLoading && filteredAdmins.length > 0" class="data-table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Full Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Created</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let admin of paginatedAdmins; let i = index; trackBy: trackById">
+          <td class="row-num">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td class="name-cell">{{ admin.Fullname }}</td>
+          <td class="email-cell">{{ admin.Email }}</td>
+          <td>
+            <span class="badge" [ngClass]="admin.Role === 'super_admin' ? 'badge-warning' : 'badge-primary'">
+              {{ admin.Role }}
+            </span>
+          </td>
+          <td class="date-cell">{{ admin.CreatedAt | date:'dd MMM yyyy' }}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn btn-icon-sm btn-ghost" (click)="viewAdmin(admin)" title="View" aria-label="View admin">
+                <lucide-icon name="eye" [size]="15" color="#475569"></lucide-icon>
+              </button>
+              <button class="btn btn-icon-sm btn-ghost" (click)="editAdmin(admin)" title="Edit" aria-label="Edit admin">
+                <lucide-icon name="pencil" [size]="15" color="#475569"></lucide-icon>
+              </button>
+              <button class="btn btn-icon-sm btn-ghost delete-btn" (click)="initiateDelete(admin)" title="Delete" aria-label="Delete admin">
+                <lucide-icon name="trash-2" [size]="15" color="#DC2626"></lucide-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination-row">
+      <span class="pagination-info">Showing {{ getPaginationRange() }} entries</span>
+      <div class="pagination-controls">
+        <button class="btn btn-secondary btn-sm btn-icon" (click)="previousPage()" [disabled]="currentPage === 1" aria-label="Previous page">
+          <lucide-icon name="chevron-left" [size]="16"></lucide-icon>
+        </button>
+        <button *ngFor="let p of getPageNumbers()" class="page-btn" [class.page-btn-active]="p === currentPage" (click)="goToPage(p)">{{ p }}</button>
+        <button class="btn btn-secondary btn-sm btn-icon" (click)="nextPage()" [disabled]="currentPage === totalPages" aria-label="Next page">
+          <lucide-icon name="chevron-right" [size]="16"></lucide-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!isLoading && filteredAdmins.length === 0" class="empty-state">
+    <lucide-icon name="users" [size]="48" color="#CBD5E1"></lucide-icon>
+    <h3 class="empty-title">No administrators found</h3>
+    <p class="empty-sub">{{ searchTerm ? 'Try adjusting your search or filter.' : 'Get started by adding the first admin.' }}</p>
+    <button class="btn btn-primary btn-md" (click)="addAdmin()">
+      <lucide-icon name="plus" [size]="16" color="#FFFFFF"></lucide-icon>
+      Add Admin
+    </button>
+  </div>
+
+</div>

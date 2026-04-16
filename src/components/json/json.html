@@ -1,0 +1,147 @@
+<div class="json-page">
+  <div class="card json-card">
+    <!-- Success Banner -->
+    <div class="alert-banner alert-success" *ngIf="submitSuccess">
+      <lucide-icon name="check-circle-2" [size]="16" color="#059669"></lucide-icon>
+      <span>JSON data uploaded successfully and added to the knowledge base.</span>
+      <button class="alert-close" (click)="submitSuccess = false">
+        <lucide-icon name="x" [size]="14"></lucide-icon>
+      </button>
+    </div>
+
+    <!-- Error Banner -->
+    <div class="alert-banner alert-error" *ngIf="submitError">
+      <lucide-icon name="alert-triangle" [size]="16" color="#DC2626"></lucide-icon>
+      <span>{{ submitError }}</span>
+      <button class="alert-close" (click)="submitError = ''">
+        <lucide-icon name="x" [size]="14"></lucide-icon>
+      </button>
+    </div>
+
+    <form #jsonForm="ngForm" (ngSubmit)="onSubmit(jsonForm)" class="json-form-grid">
+      <!-- Type -->
+      <div class="field-group">
+        <label class="form-label" for="json-type"> Type <span class="required">*</span> </label>
+        <div class="input-wrap">
+          <span class="input-icon-left">
+            <lucide-icon name="tag" [size]="16" color="#94A3B8"></lucide-icon>
+          </span>
+          <select
+            id="json-type"
+            name="type"
+            ngModel
+            required
+            class="form-input form-select has-icon-left"
+          >
+            <option value="">Select type…</option>
+            <option value="service">Service</option>
+            <option value="document">Document</option>
+            <option value="faq">FAQ</option>
+            <option value="notice">Notice</option>
+            <option value="overview">Overview</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Title -->
+      <div class="field-group">
+        <label class="form-label" for="json-title"> Title <span class="required">*</span> </label>
+        <input
+          type="text"
+          id="json-title"
+          name="title"
+          ngModel
+          required
+          class="form-input"
+          placeholder="Enter title"
+        />
+      </div>
+
+      <!-- Content (full width) -->
+      <div class="field-group field-full">
+        <label class="form-label" for="json-content">
+          Content <span class="required">*</span>
+        </label>
+        <textarea
+          id="json-content"
+          name="content"
+          ngModel
+          required
+          rows="6"
+          class="form-input"
+          placeholder="Enter detailed content"
+          style="resize: vertical"
+        ></textarea>
+      </div>
+
+      <!-- Department -->
+      <div class="field-group">
+        <label class="form-label" for="json-dept">
+          Department <span class="optional-chip">Optional</span>
+        </label>
+        <input
+          type="text"
+          id="json-dept"
+          name="department"
+          ngModel
+          class="form-input"
+          placeholder="e.g. UIDAI, EPFO"
+        />
+      </div>
+
+      <!-- Related Service -->
+      <div class="field-group">
+        <label class="form-label" for="json-service">
+          Related Service <span class="optional-chip">Optional</span>
+        </label>
+        <input
+          type="text"
+          id="json-service"
+          name="relatedService"
+          ngModel
+          class="form-input"
+          placeholder="e.g. Aadhaar Update"
+        />
+      </div>
+
+      <!-- Source (full width) -->
+      <div class="field-group field-full">
+        <label class="form-label" for="json-source">
+          Source <span class="optional-chip">Optional</span>
+        </label>
+        <input
+          type="text"
+          id="json-source"
+          name="source"
+          ngModel
+          class="form-input"
+          placeholder="Defaults to 'UMANG Official'"
+        />
+      </div>
+
+      <!-- Submit -->
+      <div class="field-full">
+        <button
+          type="submit"
+          class="btn btn-primary btn-lg submit-btn"
+          [disabled]="jsonForm.invalid || isSubmitting"
+        >
+          <lucide-icon
+            *ngIf="isSubmitting"
+            name="loader-2"
+            [size]="18"
+            color="#FFFFFF"
+            class="icon-spin"
+          ></lucide-icon>
+          <lucide-icon
+            *ngIf="!isSubmitting"
+            name="braces"
+            [size]="18"
+            color="#FFFFFF"
+          ></lucide-icon>
+          {{ isSubmitting ? 'Submitting…' : 'Submit JSON Data' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,63 @@
+.pdf-page {
+  padding: 0;
+}
+
+.upload-card {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 600px;
+}
+
+/* Drop zone */
+.drop-zone {
+  border: 2px dashed #E2E8F0;
+  background: #F8FAFC;
+  border-radius: 14px;
+  padding: 48px 24px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+.drop-zone:hover { border-color: #BFDBFE; background: #F0F9FF; }
+.drop-zone-active {
+  border-color: #3B82F6 !important;
+  background: #EFF6FF !important;
+}
+.file-input {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  opacity: 0; cursor: pointer;
+}
+.drop-heading { font-size: 16px; font-weight: 600; color: #0F172A; margin: 8px 0 0; }
+.drop-sub     { font-size: 14px; color: #475569; margin: 4px 0 0; }
+.browse-link  { color: #1D4ED8; text-decoration: underline; text-underline-offset: 2px; }
+.drop-hint    { font-size: 12px; color: #94A3B8; margin: 8px 0 0; }
+
+/* Selected file */
+.selected-file {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px;
+  background: #EFF6FF; border: 1px solid #BFDBFE;
+  border-radius: 12px;
+}
+.selected-file-info { flex: 1; }
+.file-name { font-size: 14px; font-weight: 500; color: #0F172A; margin: 0 0 2px; word-break: break-all; }
+.file-size { font-size: 12px; color: #94A3B8; margin: 0; }
+.remove-btn { flex-shrink: 0; }
+
+/* Progress */
+.progress-wrap { display: flex; flex-direction: column; gap: 6px; }
+.progress-track {
+  height: 8px; background: #F1F5F9; border-radius: 99px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: #1D4ED8; border-radius: 99px;
+  transition: width 200ms ease;
+}
+.progress-label { font-size: 12px; color: #1D4ED8; text-align: right; }
+
+/* Submit */
+.submit-btn { width: 100%; justify-content: center; gap: 8px; }

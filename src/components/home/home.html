@@ -1,0 +1,24 @@
+<div class="upload-shell">
+  <!-- Header -->
+  <header class="upload-header">
+    <div>
+      <h1 class="upload-title">RAG Knowledge Base</h1>
+      <p class="upload-sub">Manage content for the AI assistant</p>
+    </div>
+  </header>
+
+  <!-- Tab Navigation -->
+  <div class="tab-bar">
+    <a routerLink="pdf" routerLinkActive="tab-active" class="tab-item">
+      <lucide-icon name="file-text" [size]="15"></lucide-icon>
+      PDF Upload
+    </a>
+    <a routerLink="json" routerLinkActive="tab-active" class="tab-item">
+      <lucide-icon name="braces" [size]="15"></lucide-icon>
+      JSON Data
+    </a>
+  </div>
+
+  <!-- Child route -->
+  <router-outlet></router-outlet>
+</div>

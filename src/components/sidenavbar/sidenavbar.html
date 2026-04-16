@@ -1,0 +1,38 @@
+<aside class="admin-sidebar" [class.sidebar-collapsed]="isCollapsed">
+  <!-- Brand header -->
+  <div class="sidebar-header">
+    <lucide-icon name="shield-check" [size]="20" color="#1D4ED8"></lucide-icon>
+    <span class="sidebar-brand-text sidebar-label">Admin Panel</span>
+  </div>
+
+  <!-- Nav -->
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      <li *ngFor="let item of menuItems" class="nav-item">
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="nav-link-active"
+          class="nav-link"
+          (click)="onMenuItemClick(item.id)"
+          [attr.title]="isCollapsed ? item.label : null"
+          [attr.aria-label]="item.label">
+          <span class="nav-icon-wrap">
+            <lucide-icon [name]="item.icon" [size]="20"></lucide-icon>
+            <span *ngIf="item.badge && isCollapsed" class="badge-dot"></span>
+          </span>
+          <span class="nav-label sidebar-label">{{ item.label }}</span>
+          <span *ngIf="item.badge && !isCollapsed" class="nav-badge">{{ item.badge }}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Footer -->
+  <div class="sidebar-footer" *ngIf="!isCollapsed">
+    <div class="system-status">
+      <span class="status-dot"></span>
+      <span class="status-text">System Online</span>
+    </div>
+    <span class="version-text">v2.1.0</span>
+  </div>
+</aside>

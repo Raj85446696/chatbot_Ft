@@ -1,0 +1,95 @@
+<nav class="admin-navbar">
+  <!-- Left -->
+  <div class="navbar-left">
+    <button class="btn btn-icon btn-ghost hamburger-btn" (click)="onToggleSidebar()"
+            aria-label="Toggle sidebar">
+      <lucide-icon [name]="isSidebarCollapsed ? 'panel-left-close' : 'menu'" [size]="20" color="#475569"></lucide-icon>
+    </button>
+    <div class="navbar-brand">
+      <lucide-icon name="shield-check" [size]="20" color="#1D4ED8"></lucide-icon>
+      <span class="navbar-brand-text">UMANG Admin</span>
+    </div>
+  </div>
+
+  <!-- Right -->
+  <div class="navbar-right">
+
+    <!-- Notifications -->
+    <div class="notif-wrapper nav-dropdown-host">
+      <button class="btn btn-icon btn-ghost notif-btn" (click)="toggleNotifications()"
+              aria-label="Notifications">
+        <lucide-icon name="bell" [size]="20" color="#475569"></lucide-icon>
+        <span class="notif-badge" *ngIf="unreadNotificationsCount > 0">
+          {{ unreadNotificationsCount }}
+        </span>
+      </button>
+
+      <div class="nav-dropdown notif-dropdown dropdown-appear" *ngIf="showNotifications">
+        <div class="dropdown-header">
+          <span class="dropdown-title">Notifications</span>
+          <button class="clear-all-btn" (click)="clearAllNotifications()">Clear all</button>
+        </div>
+        <div class="dropdown-body">
+          <div *ngFor="let n of notifications" class="notif-item" [class.notif-unread]="!n.read"
+               (click)="markNotificationAsRead(n.id)">
+            <div class="notif-icon-wrap">
+              <lucide-icon name="bell" [size]="16" color="#1D4ED8"></lucide-icon>
+            </div>
+            <div class="notif-content">
+              <p class="notif-title">{{ n.title }}</p>
+              <span class="notif-time">{{ n.time }}</span>
+            </div>
+          </div>
+          <div *ngIf="notifications.length === 0" class="dropdown-empty">
+            <lucide-icon name="bell-off" [size]="32" color="#94A3B8"></lucide-icon>
+            <p>No notifications</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile -->
+    <div class="profile-wrapper nav-dropdown-host">
+      <button class="profile-trigger" (click)="toggleProfileMenu()" aria-label="Profile menu">
+        <img [src]="userProfile.avatar || 'https://ui-avatars.com/api/?name=Admin&background=1D4ED8&color=fff'"
+             alt="Profile" class="profile-avatar" />
+        <div class="profile-info">
+          <span class="profile-name">{{ userProfile.name || 'Admin' }}</span>
+          <span class="profile-role">{{ userProfile.role || '—' }}</span>
+        </div>
+        <lucide-icon name="chevron-down" [size]="14" color="#94A3B8"></lucide-icon>
+      </button>
+
+      <div class="nav-dropdown profile-dropdown dropdown-appear" *ngIf="showProfileMenu">
+        <div class="profile-dropdown-header">
+          <img [src]="userProfile.avatar || 'https://ui-avatars.com/api/?name=Admin&background=1D4ED8&color=fff'"
+               alt="Profile" class="profile-avatar-lg" />
+          <div>
+            <p class="pd-name">{{ userProfile.name || 'Admin' }}</p>
+            <p class="pd-email">{{ userProfile.email }}</p>
+          </div>
+        </div>
+        <div class="dropdown-menu-items">
+          <a href="#" class="dropdown-menu-item" (click)="$event.preventDefault()">
+            <lucide-icon name="user" [size]="16" color="#475569"></lucide-icon>
+            My Profile
+          </a>
+          <a href="#" class="dropdown-menu-item" (click)="$event.preventDefault()">
+            <lucide-icon name="settings" [size]="16" color="#475569"></lucide-icon>
+            Settings
+          </a>
+          <a href="#" class="dropdown-menu-item" (click)="$event.preventDefault()">
+            <lucide-icon name="help-circle" [size]="16" color="#475569"></lucide-icon>
+            Help &amp; Support
+          </a>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-menu-item dropdown-menu-item-danger" (click)="onLogout()">
+            <lucide-icon name="log-out" [size]="16" color="#DC2626"></lucide-icon>
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>

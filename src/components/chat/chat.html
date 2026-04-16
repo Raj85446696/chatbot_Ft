@@ -1,0 +1,181 @@
+<div class="chat-shell">
+  <!-- ── Header ── -->
+  <header class="chat-header">
+    <div class="chat-header-left">
+      <div class="chat-brand-icon">
+        <lucide-icon name="bot" [size]="22" color="#FFFFFF"></lucide-icon>
+      </div>
+      <div>
+        <div class="chat-brand-title">UMANG</div>
+        <div class="chat-brand-sub">AI-powered Assistant</div>
+      </div>
+    </div>
+    <div class="chat-header-right">
+      <div class="live-dot-wrap">
+        <span class="live-dot"></span>
+        <span class="live-label">Live</span>
+      </div>
+      <button class="btn btn-ghost btn-sm clear-btn" (click)="clearChat()">
+        <lucide-icon name="trash-2" [size]="15"></lucide-icon>
+        Clear
+      </button>
+    </div>
+  </header>
+
+  <!-- ── Error Alert ── -->
+  <div class="chat-alert alert-banner alert-error" *ngIf="errorMessage">
+    <lucide-icon name="alert-triangle" [size]="15" color="#DC2626"></lucide-icon>
+    <span>{{ errorMessage }}</span>
+    <button class="alert-close" (click)="errorMessage = ''">
+      <lucide-icon name="x" [size]="14"></lucide-icon>
+    </button>
+  </div>
+
+  <!-- ── Messages Body ── -->
+  <div class="chat-messages" #chatBody>
+    <!-- Welcome state: shown when chat is fresh or only has the automated greeting -->
+    <div *ngIf="messages.length <= 1" class="welcome-state">
+      <div class="welcome-icon-mark">
+        <lucide-icon name="sparkles" [size]="32" color="#1D4ED8"></lucide-icon>
+      </div>
+      <h2 class="welcome-heading">How can I help you today?</h2>
+      <p class="welcome-sub">
+        Ask me anything about UMANG services, documentation, or active processes.
+      </p>
+
+      <div class="suggestion-grid">
+        <button
+          *ngFor="let p of suggestedPrompts"
+          class="suggestion-chip"
+          (click)="sendSuggestion(p)"
+        >
+          <lucide-icon name="plus" [size]="14"></lucide-icon>
+          {{ p }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Message list -->
+    <div class="message-list-container" *ngIf="messages.length > 1">
+      <ng-container *ngFor="let msg of messages; let first = first">
+        <!-- Skip the first greeting message if we are showing the welcome state -->
+        <!-- Actually, if we're in list mode, we show everything -->
+
+        <!-- USER MESSAGE -->
+        <div *ngIf="msg.sender === 'user'" class="msg-row msg-row-user message-appear">
+          <div class="msg-user-meta">
+            <span class="msg-time">{{ msg.timestamp | date: 'h:mm a' }}</span>
+            <button
+              class="copy-btn"
+              (click)="copyMessage(msg.text || '', msg.id)"
+              title="Copy message"
+              aria-label="Copy message"
+            >
+              <lucide-icon
+                [name]="isCopied[msg.id] ? 'check' : 'copy'"
+                [size]="13"
+                [color]="isCopied[msg.id] ? '#059669' : '#94A3B8'"
+              >
+              </lucide-icon>
+            </button>
+          </div>
+          <div class="bubble bubble-user" [innerHTML]="msg.html || msg.text"></div>
+        </div>
+
+        <!-- BOT MESSAGE -->
+        <div *ngIf="msg.sender === 'bot'" class="msg-row msg-row-bot message-appear">
+          <div class="bot-avatar">
+            <lucide-icon name="sparkles" [size]="16" color="#FFFFFF"></lucide-icon>
+          </div>
+          <div class="bot-content">
+            <div class="msg-bot-meta">
+              <span class="bot-name">UMANG</span>
+              <span class="msg-time">{{ msg.timestamp | date: 'h:mm a' }}</span>
+            </div>
+            <div class="typing-pill" *ngIf="isPendingBotMessage(msg)">
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+            </div>
+            <div
+              *ngIf="!isPendingBotMessage(msg)"
+              class="bubble bubble-bot bot-prose"
+              [innerHTML]="msg.html || msg.text"
+              [class.bubble-bot-error]="msg.error"
+            ></div>
+            <div *ngIf="msg.error" class="error-badge">
+              <lucide-icon name="alert-triangle" [size]="12" color="#DC2626"></lucide-icon>
+              <span>Failed to send</span>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- ── Footer ── -->
+  <footer class="chat-footer">
+    <div class="input-shell" [class.input-shell-focused]="isFooterFocused">
+      <button
+        class="btn btn-icon mic-btn"
+        [class.mic-recording]="isRecording"
+        (click)="toggleVoiceInput()"
+        [disabled]="isLoading"
+        [attr.aria-label]="isRecording ? 'Stop recording' : 'Start voice input'"
+      >
+        <lucide-icon
+          [name]="isRecording ? 'mic' : 'mic'"
+          [size]="20"
+          [color]="isRecording ? '#DC2626' : '#94A3B8'"
+        >
+        </lucide-icon>
+      </button>
+      <textarea
+        class="chat-textarea"
+        [(ngModel)]="userInput"
+        (keydown.enter)="onEnterKey($event)"
+        (input)="autoResizeTextarea($event)"
+        (focus)="isFooterFocused = true"
+        (blur)="isFooterFocused = false"
+        placeholder="Ask me anything…"
+        [maxlength]="500"
+        [disabled]="isLoading"
+        rows="1"
+        aria-label="Message input"
+      >
+      </textarea>
+      <span
+        class="char-count"
+        [class.char-warn]="userInput.length > 400"
+        [class.char-error]="userInput.length > 480"
+        *ngIf="isFooterFocused || userInput.length > 0"
+      >
+        {{ userInput.length }}/500
+      </span>
+      <button
+        class="send-btn"
+        [class.send-btn-active]="userInput.trim()"
+        (click)="sendMessage()"
+        [disabled]="!userInput.trim() || isLoading"
+        aria-label="Send message"
+      >
+        <lucide-icon
+          *ngIf="!isLoading"
+          name="send"
+          [size]="18"
+          [color]="userInput.trim() ? '#FFFFFF' : '#94A3B8'"
+        >
+        </lucide-icon>
+        <lucide-icon
+          *ngIf="isLoading"
+          name="loader-2"
+          [size]="18"
+          color="#FFFFFF"
+          class="icon-spin"
+        >
+        </lucide-icon>
+      </button>
+    </div>
+    <div class="footer-hint" *ngIf="isFooterFocused">Enter to send · Shift+Enter for new line</div>
+  </footer>
+</div>

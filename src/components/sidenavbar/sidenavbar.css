@@ -1,0 +1,115 @@
+.admin-sidebar {
+  width: 256px;
+  background: #FFFFFF;
+  border-right: 1px solid #E2E8F0;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: width 250ms cubic-bezier(0,0,0.2,1);
+  height: 100%;
+}
+.admin-sidebar.sidebar-collapsed { width: 68px; }
+
+/* Header */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  border-bottom: 1px solid #E2E8F0;
+  height: 60px;
+  flex-shrink: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.sidebar-brand-text {
+  font-size: 15px; font-weight: 600; color: #0F172A;
+  letter-spacing: -0.005em;
+}
+
+/* Nav */
+.sidebar-nav { flex: 1; padding: 8px; overflow-y: auto; overflow-x: hidden; }
+.nav-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px;
+  border-radius: 8px;
+  color: #475569;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: background 150ms ease, color 150ms ease;
+  position: relative;
+}
+.nav-link:hover { background: #F1F5F9; color: #0F172A; }
+.nav-link-active {
+  background: #EFF6FF !important;
+  color: #1D4ED8 !important;
+  font-weight: 500;
+}
+.nav-link-active lucide-icon { color: #1D4ED8; }
+
+.nav-icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+}
+
+/* Sidebar label (hide when collapsed) */
+.sidebar-label {
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+.sidebar-collapsed .sidebar-label {
+  opacity: 0;
+  transform: translateX(-8px);
+  pointer-events: none;
+  width: 0;
+  overflow: hidden;
+}
+
+/* Badge */
+.nav-badge {
+  margin-left: auto;
+  background: #FEF2F2;
+  color: #DC2626;
+  font-size: 11px; font-weight: 600;
+  border-radius: 99px;
+  padding: 1px 7px;
+  min-width: 18px; text-align: center;
+  flex-shrink: 0;
+}
+.badge-dot {
+  position: absolute;
+  top: -2px; right: -2px;
+  width: 8px; height: 8px;
+  background: #DC2626; border-radius: 50%;
+  border: 2px solid #FFFFFF;
+}
+
+/* Footer */
+.sidebar-footer {
+  padding: 14px 16px;
+  border-top: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.system-status { display: flex; align-items: center; gap: 6px; }
+.status-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #059669;
+  box-shadow: 0 0 0 2px rgba(5,150,105,0.2);
+}
+.status-text { font-size: 12px; color: #059669; font-weight: 500; }
+.version-text { font-size: 11px; color: #94A3B8; }

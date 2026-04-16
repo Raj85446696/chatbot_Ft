@@ -1,0 +1,17 @@
+<div class="admin-shell">
+  <app-navbar
+    [isSidebarCollapsed]="isSidebarCollapsed"
+    (toggleSidebar)="toggleSidebar()">
+  </app-navbar>
+
+  <div class="admin-body">
+    <app-sidenavbar
+      [isCollapsed]="isSidebarCollapsed"
+      (menuItemSelected)="onMenuItemSelected($event)">
+    </app-sidenavbar>
+
+    <main class="admin-main" [class.admin-main-collapsed]="isSidebarCollapsed">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

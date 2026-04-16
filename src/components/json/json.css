@@ -1,0 +1,47 @@
+/* ══════════════════════════════════════════
+   JSON UPLOAD — Design System v1.0
+   ══════════════════════════════════════════ */
+
+.json-page {
+  padding: 0;
+}
+
+.json-card {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 720px;
+}
+
+/* Form Grid */
+.json-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.field-full {
+  grid-column: 1 / -1;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Submit */
+.submit-btn {
+  width: 100%;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .json-form-grid {
+    grid-template-columns: 1fr;
+  }
+}

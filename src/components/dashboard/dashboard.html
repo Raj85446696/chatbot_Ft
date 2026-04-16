@@ -1,0 +1,184 @@
+<div class="dash-page">
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">Welcome back, <span class="name-highlight">{{ adminName }}</span></h1>
+      <p class="page-sub">Activity overview for today</p>
+    </div>
+    <div class="header-actions">
+      <div class="date-chip">
+        <lucide-icon name="calendar" [size]="14" color="#475569"></lucide-icon>
+        <span>{{ today | date:'EEE, MMM d, y' }}</span>
+      </div>
+      <button class="btn btn-secondary btn-sm refresh-btn" (click)="refreshData()">
+        <lucide-icon name="refresh-cw" [size]="14" [class.icon-spin]="isRefreshing"></lucide-icon>
+        Refresh
+      </button>
+    </div>
+  </header>
+
+  <!-- Metric Cards -->
+  <section class="metrics-grid">
+
+    <!-- Admin card -->
+    <div class="metric-card">
+      <div class="metric-card-header">
+        <span class="metric-label">Admin Team</span>
+        <div class="metric-icon-wrap metric-icon-blue">
+          <lucide-icon name="users" [size]="18" color="#1D4ED8"></lucide-icon>
+        </div>
+      </div>
+      <div class="metric-value">{{ adminStats.total }}</div>
+      <div class="metric-sub-row">
+        <span class="metric-sub">{{ adminStats.active }} active · {{ adminStats.superAdmins }} super</span>
+        <span class="metric-trend positive">
+          <lucide-icon name="trending-up" [size]="12" color="#059669"></lucide-icon>
+          8.5%
+        </span>
+      </div>
+    </div>
+
+    <!-- Uploads card -->
+    <div class="metric-card">
+      <div class="metric-card-header">
+        <span class="metric-label">Content Uploads</span>
+        <div class="metric-icon-wrap metric-icon-green">
+          <lucide-icon name="upload-cloud" [size]="18" color="#059669"></lucide-icon>
+        </div>
+      </div>
+      <div class="metric-value">{{ uploadStats.pdf.total + uploadStats.json.total }}</div>
+      <div class="metric-sub-row">
+        <span class="metric-sub">+{{ uploadStats.pdf.today + uploadStats.json.today }} today</span>
+        <span class="metric-trend positive">
+          <lucide-icon name="trending-up" [size]="12" color="#059669"></lucide-icon>
+          {{ uploadStats.pdf.lastWeek + uploadStats.json.lastWeek }} this week
+        </span>
+      </div>
+    </div>
+
+    <!-- System card -->
+    <div class="metric-card">
+      <div class="metric-card-header">
+        <span class="metric-label">System Health</span>
+        <div class="metric-icon-wrap metric-icon-amber">
+          <lucide-icon name="activity" [size]="18" color="#D97706"></lucide-icon>
+        </div>
+      </div>
+      <div class="metric-value">99.8%</div>
+      <div class="metric-sub-row">
+        <span class="metric-sub">142ms response · 68% storage</span>
+        <span class="metric-trend positive">
+          <lucide-icon name="trending-up" [size]="12" color="#059669"></lucide-icon>
+          Healthy
+        </span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Analytics Section -->
+  <section class="analytics-section">
+
+    <!-- Upload Trends Chart -->
+    <div class="card chart-card">
+      <div class="card-header-row">
+        <h3 class="card-title">Upload Trends</h3>
+        <div class="time-tabs">
+          <button class="time-tab time-tab-active">Week</button>
+          <button class="time-tab">Month</button>
+          <button class="time-tab">Quarter</button>
+        </div>
+      </div>
+      <div class="bar-chart">
+        <div class="bar-group" *ngFor="let day of uploadTrendData.labels; let i = index">
+          <div class="bars">
+            <div class="bar bar-pdf" [style.height.%]="getBarHeightPct(uploadTrendData.pdf[i])"
+                 [attr.title]="uploadTrendData.pdf[i] + ' PDF'">
+              <span class="bar-val">{{ uploadTrendData.pdf[i] }}</span>
+            </div>
+            <div class="bar bar-json" [style.height.%]="getBarHeightPct(uploadTrendData.json[i])"
+                 [attr.title]="uploadTrendData.json[i] + ' JSON'">
+              <span class="bar-val">{{ uploadTrendData.json[i] }}</span>
+            </div>
+          </div>
+          <div class="bar-label">{{ day }}</div>
+        </div>
+      </div>
+      <div class="chart-legend">
+        <div class="legend-item"><span class="legend-dot legend-pdf"></span> PDF <span class="legend-count">{{ uploadStats.pdf.total }}</span></div>
+        <div class="legend-item"><span class="legend-dot legend-json"></span> JSON <span class="legend-count">{{ uploadStats.json.total }}</span></div>
+      </div>
+    </div>
+
+    <!-- Activity Feed -->
+    <div class="card activity-card">
+      <div class="card-header-row">
+        <h3 class="card-title">Recent Activity</h3>
+        <a class="view-all-link" href="#">
+          View all
+          <lucide-icon name="arrow-right" [size]="14" color="#1D4ED8"></lucide-icon>
+        </a>
+      </div>
+      <div class="activity-list">
+        <div class="activity-item" *ngFor="let a of recentActivities">
+          <div class="activity-icon-wrap" [ngClass]="'activity-icon-' + a.type">
+            <lucide-icon [name]="getActivityIcon(a.type)" [size]="16"></lucide-icon>
+          </div>
+          <div class="activity-content">
+            <p class="activity-desc"><strong>{{ a.user }}</strong> {{ a.action }}</p>
+            <span class="activity-time">
+              <lucide-icon name="clock" [size]="11" color="#94A3B8"></lucide-icon>
+              {{ a.time }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Quick Actions -->
+  <section class="quick-actions-section">
+    <div class="section-heading-row">
+      <h3 class="section-heading">Quick Actions</h3>
+    </div>
+    <div class="quick-actions-grid">
+      <div class="action-card" *ngFor="let action of quickActions" (click)="handleQuickAction(action)">
+        <div class="action-icon-wrap" [ngClass]="'action-icon-' + action.color">
+          <lucide-icon [name]="action.icon" [size]="20"></lucide-icon>
+        </div>
+        <div class="action-content">
+          <h4 class="action-label">{{ action.label }}</h4>
+          <p class="action-desc">{{ getActionDescription(action.label) }}</p>
+        </div>
+        <lucide-icon name="arrow-right" [size]="16" color="#94A3B8" class="action-arrow"></lucide-icon>
+      </div>
+    </div>
+  </section>
+
+  <!-- Summary Banner -->
+  <section class="summary-banner">
+    <div class="summary-stats">
+      <div class="summary-stat">
+        <span class="summary-val">{{ uploadStats.pdf.today + uploadStats.json.today }}</span>
+        <span class="summary-label">Uploads Today</span>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-stat">
+        <span class="summary-val">{{ adminStats.active }}</span>
+        <span class="summary-label">Active Admins</span>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-stat">
+        <span class="summary-val">100%</span>
+        <span class="summary-label">Uptime</span>
+      </div>
+    </div>
+    <button class="btn summary-report-btn" (click)="generateReport()">
+      <lucide-icon name="download" [size]="16" color="#1D4ED8"></lucide-icon>
+      Download Report
+    </button>
+  </section>
+
+</div>

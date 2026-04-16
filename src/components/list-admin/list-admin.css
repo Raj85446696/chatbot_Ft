@@ -1,0 +1,229 @@
+/* ══════════════════════════════════════════
+   LIST ADMIN — Design System v1.0
+   Leverages global: .btn-*, .badge-*, .data-table-*,
+   .alert-*, .modal-*, .form-input, .skeleton
+   ══════════════════════════════════════════ */
+
+.list-admin-page {
+  padding: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Page Header ── */
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.page-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.015em;
+}
+.count-chip {
+  display: inline-flex;
+  align-items: center;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+.page-sub {
+  font-size: 14px;
+  color: #94a3b8;
+  margin: 4px 0 0;
+}
+
+/* ── Toolbar ── */
+.toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.search-input-wrap {
+  flex: 1;
+}
+.role-select {
+  min-width: 140px;
+}
+
+/* ── Modal overrides ── */
+.modal-delete-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 99px;
+  background: #fef2f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+.modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+  text-align: center;
+  margin: 0 0 8px;
+}
+.modal-body {
+  font-size: 14px;
+  color: #475569;
+  text-align: center;
+  margin: 0 0 16px;
+  line-height: 1.55;
+}
+.modal-input-wrap {
+  margin-bottom: 20px;
+}
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* ── Table extras ── */
+.name-cell {
+  font-weight: 500;
+  color: #0f172a;
+}
+.email-cell {
+  color: #475569;
+}
+.date-cell {
+  color: #94a3b8;
+  font-size: 13px;
+}
+.row-num {
+  color: #94a3b8;
+  font-size: 12px;
+}
+.action-buttons {
+  display: flex;
+  gap: 4px;
+}
+.delete-btn:hover {
+  background: #fef2f2 !important;
+}
+
+/* ── Pagination ── */
+.pagination-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-top: 1px solid #e2e8f0;
+}
+.pagination-info {
+  font-size: 12px;
+  color: #94a3b8;
+}
+.pagination-controls {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.page-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 150ms ease,
+    color 150ms ease;
+  font-family: inherit;
+}
+.page-btn:hover {
+  background: #f1f5f9;
+}
+.page-btn-active {
+  background: #1d4ed8 !important;
+  color: #ffffff !important;
+}
+
+/* ── Skeleton ── */
+.skeleton-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.skeleton-row {
+  height: 48px;
+  width: 100%;
+}
+
+/* ── Empty State ── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 64px 24px;
+  gap: 12px;
+}
+.empty-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 8px 0 0;
+}
+.empty-sub {
+  font-size: 14px;
+  color: #94a3b8;
+  margin: 0 0 8px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .list-admin-page {
+    padding: 16px;
+    gap: 12px;
+  }
+  .page-header {
+    flex-direction: column;
+  }
+  .toolbar {
+    flex-direction: column;
+  }
+  .search-input-wrap {
+    width: 100%;
+  }
+  .role-select {
+    width: 100%;
+  }
+  .data-table {
+    font-size: 13px;
+  }
+  .data-table th,
+  .data-table td {
+    padding: 10px 12px;
+  }
+  .pagination-row {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+}

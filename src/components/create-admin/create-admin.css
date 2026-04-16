@@ -1,0 +1,199 @@
+/* ══════════════════════════════════════════
+   CREATE ADMIN — Design System v1.0
+   ══════════════════════════════════════════ */
+
+.create-admin-page {
+  padding: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+/* Card */
+.form-card {
+  width: 100%;
+  max-width: 640px;
+  padding: 32px;
+}
+
+.card-heading {
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+}
+.card-subtitle {
+  font-size: 14px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* Form Sections */
+.form-section {
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.form-section-last {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.section-overline {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+
+/* Field Groups */
+.field-group {
+  margin-bottom: 16px;
+}
+.field-group:last-child {
+  margin-bottom: 0;
+}
+
+/* Password Strength Meter */
+.strength-meter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+.strength-bars {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+.strength-seg {
+  height: 4px;
+  flex: 1;
+  border-radius: 99px;
+  background: #e2e8f0;
+  transition: background 200ms ease;
+}
+.seg-active.seg-weak {
+  background: #dc2626;
+}
+.seg-active.seg-fair {
+  background: #d97706;
+}
+.seg-active.seg-good {
+  background: #3b82f6;
+}
+.seg-active.seg-strong {
+  background: #059669;
+}
+
+.strength-label {
+  font-size: 12px;
+  font-weight: 500;
+  flex-shrink: 0;
+  min-width: 48px;
+}
+.strength-label.seg-weak {
+  color: #dc2626;
+}
+.strength-label.seg-fair {
+  color: #d97706;
+}
+.strength-label.seg-good {
+  color: #3b82f6;
+}
+.strength-label.seg-strong {
+  color: #059669;
+}
+
+/* Requirements Checklist */
+.req-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+.req-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #94a3b8;
+  transition: color 150ms ease;
+}
+.req-item.req-met {
+  color: #059669;
+}
+
+/* Role Display */
+.role-display-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+}
+.role-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(217, 119, 6, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.role-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.role-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #0f172a;
+}
+.role-desc {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* Action Row */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 20px;
+  margin-top: 24px;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .create-admin-page {
+    padding: 16px;
+  }
+  .form-card {
+    padding: 20px;
+  }
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+  .form-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

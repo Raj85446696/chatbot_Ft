@@ -1,0 +1,64 @@
+<div class="pdf-page">
+  <div class="card upload-card">
+
+    <!-- Success banner -->
+    <div class="alert-banner alert-success" *ngIf="uploadSuccess">
+      <lucide-icon name="check-circle-2" [size]="16" color="#059669"></lucide-icon>
+      <span>PDF uploaded successfully and added to the knowledge base.</span>
+      <button class="alert-close" (click)="uploadSuccess=false">
+        <lucide-icon name="x" [size]="14"></lucide-icon>
+      </button>
+    </div>
+
+    <!-- Error banner -->
+    <div class="alert-banner alert-error" *ngIf="uploadError">
+      <lucide-icon name="alert-triangle" [size]="16" color="#DC2626"></lucide-icon>
+      <span>{{ uploadError }}</span>
+      <button class="alert-close" (click)="uploadError=''">
+        <lucide-icon name="x" [size]="14"></lucide-icon>
+      </button>
+    </div>
+
+    <form (ngSubmit)="onSubmit()">
+
+      <!-- Drop zone (shown when no file selected) -->
+      <div *ngIf="!selectedFile" class="drop-zone" [class.drop-zone-active]="isDragOver"
+           (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+        <input type="file" class="file-input" accept=".pdf" (change)="onFileSelected($event)" #fileInput />
+        <lucide-icon name="upload-cloud" [size]="40" [color]="isDragOver ? '#1D4ED8' : '#94A3B8'"></lucide-icon>
+        <h4 class="drop-heading">Drop your PDF here</h4>
+        <p class="drop-sub">or <span class="browse-link">click to browse</span></p>
+        <p class="drop-hint">PDF only · Max 10MB</p>
+      </div>
+
+      <!-- Selected file display -->
+      <div *ngIf="selectedFile" class="selected-file">
+        <lucide-icon name="file-text" [size]="32" color="#1D4ED8"></lucide-icon>
+        <div class="selected-file-info">
+          <p class="file-name">{{ selectedFile.name }}</p>
+          <p class="file-size">{{ getFileSize(selectedFile.size) }}</p>
+        </div>
+        <button type="button" class="btn btn-icon btn-ghost remove-btn" (click)="removeFile()" aria-label="Remove file">
+          <lucide-icon name="x" [size]="16" color="#94A3B8"></lucide-icon>
+        </button>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="progress-wrap" *ngIf="isUploading">
+        <div class="progress-track">
+          <div class="progress-fill" [style.width.%]="uploadProgress"></div>
+        </div>
+        <span class="progress-label">Uploading… {{ uploadProgress }}%</span>
+      </div>
+
+      <!-- Submit button -->
+      <button type="submit" class="btn btn-primary btn-lg submit-btn"
+              [disabled]="!selectedFile || isUploading">
+        <lucide-icon *ngIf="isUploading" name="loader-2" [size]="18" color="#FFFFFF" class="icon-spin"></lucide-icon>
+        <lucide-icon *ngIf="!isUploading" name="upload-cloud" [size]="18" color="#FFFFFF"></lucide-icon>
+        {{ isUploading ? 'Uploading…' : 'Upload PDF' }}
+      </button>
+
+    </form>
+  </div>
+</div>

@@ -1,0 +1,219 @@
+<div class="create-admin-page">
+  <div class="form-card card">
+    <!-- Card Header -->
+    <div class="card-heading">
+      <h2 class="card-title">Create Admin Account</h2>
+      <p class="card-subtitle">Add a new administrator to the system</p>
+    </div>
+
+    <!-- Success Banner -->
+    <div class="alert-banner alert-success" *ngIf="successMessage">
+      <lucide-icon name="check-circle-2" [size]="16" color="#059669"></lucide-icon>
+      <span>{{ successMessage }}</span>
+      <button class="alert-close" (click)="successMessage = ''">
+        <lucide-icon name="x" [size]="14"></lucide-icon>
+      </button>
+    </div>
+
+    <!-- Error Banner -->
+    <div class="alert-banner alert-error" *ngIf="errorMessage">
+      <lucide-icon name="alert-triangle" [size]="16" color="#DC2626"></lucide-icon>
+      <span>{{ errorMessage }}</span>
+      <button class="alert-close" (click)="errorMessage = ''">
+        <lucide-icon name="x" [size]="14"></lucide-icon>
+      </button>
+    </div>
+
+    <form [formGroup]="adminForm" (ngSubmit)="onSubmit()">
+      <!-- Section 1 — Personal Information -->
+      <div class="form-section">
+        <span class="section-overline">Personal Information</span>
+
+        <!-- Full Name -->
+        <div class="field-group">
+          <label class="form-label" for="ca-fullname">
+            Full Name <span class="required">*</span>
+          </label>
+          <div class="input-wrap">
+            <span class="input-icon-left">
+              <lucide-icon name="user" [size]="16" color="#94A3B8"></lucide-icon>
+            </span>
+            <input
+              type="text"
+              id="ca-fullname"
+              class="form-input has-icon-left"
+              formControlName="Fullname"
+              placeholder="Enter full name"
+              [class.input-error]="
+                adminForm.get('Fullname')?.invalid && adminForm.get('Fullname')?.touched
+              "
+            />
+          </div>
+          <div
+            *ngIf="adminForm.get('Fullname')?.invalid && adminForm.get('Fullname')?.touched"
+            class="form-error"
+          >
+            <lucide-icon name="alert-triangle" [size]="12" color="#DC2626"></lucide-icon>
+            Full name is required
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="field-group">
+          <label class="form-label" for="ca-email">
+            Email Address <span class="required">*</span>
+          </label>
+          <div class="input-wrap">
+            <span class="input-icon-left">
+              <lucide-icon name="mail" [size]="16" color="#94A3B8"></lucide-icon>
+            </span>
+            <input
+              type="email"
+              id="ca-email"
+              class="form-input has-icon-left"
+              formControlName="Email"
+              placeholder="Enter email address"
+              [class.input-error]="
+                adminForm.get('Email')?.invalid && adminForm.get('Email')?.touched
+              "
+            />
+          </div>
+          <div
+            *ngIf="adminForm.get('Email')?.invalid && adminForm.get('Email')?.touched"
+            class="form-error"
+          >
+            <lucide-icon name="alert-triangle" [size]="12" color="#DC2626"></lucide-icon>
+            <span *ngIf="adminForm.get('Email')?.errors?.['required']">Email is required</span>
+            <span *ngIf="adminForm.get('Email')?.errors?.['email']"
+              >Enter a valid email address</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2 — Security -->
+      <div class="form-section">
+        <span class="section-overline">Security</span>
+
+        <!-- Password -->
+        <div class="field-group">
+          <label class="form-label" for="ca-password">
+            Password <span class="required">*</span>
+          </label>
+          <div class="input-wrap">
+            <span class="input-icon-left">
+              <lucide-icon name="lock" [size]="16" color="#94A3B8"></lucide-icon>
+            </span>
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              id="ca-password"
+              class="form-input has-icon-left has-icon-right"
+              formControlName="Password"
+              placeholder="Create a strong password"
+              [class.input-error]="
+                adminForm.get('Password')?.invalid && adminForm.get('Password')?.touched
+              "
+            />
+            <span
+              class="input-icon-right"
+              (click)="togglePasswordVisibility()"
+              role="button"
+              tabindex="0"
+              [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+            >
+              <lucide-icon
+                [name]="showPassword ? 'eye-off' : 'eye'"
+                [size]="16"
+                color="#94A3B8"
+              ></lucide-icon>
+            </span>
+          </div>
+
+          <!-- Strength Meter -->
+          <div class="strength-meter" *ngIf="adminForm.get('Password')?.value">
+            <div class="strength-bars">
+              <div
+                class="strength-seg"
+                *ngFor="let s of [1, 2, 3, 4]"
+                [class.seg-active]="s <= passwordStrength"
+                [ngClass]="getStrengthSegClass()"
+              ></div>
+            </div>
+            <span class="strength-label" [ngClass]="getStrengthSegClass()">{{
+              getStrengthLabel()
+            }}</span>
+          </div>
+
+          <!-- Requirements Checklist -->
+          <div
+            class="req-list"
+            *ngIf="adminForm.get('Password')?.value || adminForm.get('Password')?.touched"
+          >
+            <div class="req-item" [class.req-met]="hasMinLength">
+              <lucide-icon
+                [name]="hasMinLength ? 'check' : 'circle'"
+                [size]="12"
+                [color]="hasMinLength ? '#059669' : '#CBD5E1'"
+              ></lucide-icon>
+              <span>8+ characters</span>
+            </div>
+            <div class="req-item" [class.req-met]="hasLetters">
+              <lucide-icon
+                [name]="hasLetters ? 'check' : 'circle'"
+                [size]="12"
+                [color]="hasLetters ? '#059669' : '#CBD5E1'"
+              ></lucide-icon>
+              <span>Contains letters</span>
+            </div>
+            <div class="req-item" [class.req-met]="hasNumbers">
+              <lucide-icon
+                [name]="hasNumbers ? 'check' : 'circle'"
+                [size]="12"
+                [color]="hasNumbers ? '#059669' : '#CBD5E1'"
+              ></lucide-icon>
+              <span>Contains numbers</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3 — Role -->
+      <div class="form-section form-section-last">
+        <span class="section-overline">Role Assignment</span>
+
+        <div class="role-display-card">
+          <div class="role-icon-wrap">
+            <lucide-icon name="shield" [size]="16" color="#D97706"></lucide-icon>
+          </div>
+          <div class="role-info">
+            <span class="role-name">Administrator</span>
+            <span class="role-desc">Full access to admin panel features</span>
+          </div>
+          <span class="badge badge-warning">Admin</span>
+        </div>
+        <input type="hidden" formControlName="Role" />
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary btn-md" routerLink="/admin/manage">
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary btn-md"
+          [disabled]="adminForm.invalid || isSubmitting"
+        >
+          <lucide-icon
+            *ngIf="isSubmitting"
+            name="loader-2"
+            [size]="16"
+            class="icon-spin"
+            color="#FFFFFF"
+          ></lucide-icon>
+          {{ isSubmitting ? 'Creating…' : 'Create Admin' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

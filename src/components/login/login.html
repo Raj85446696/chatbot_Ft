@@ -1,0 +1,99 @@
+<div class="login-page">
+  <!-- Ambient bg blobs -->
+  <div class="bg-blob bg-blob-1"></div>
+  <div class="bg-blob bg-blob-2"></div>
+
+  <div class="login-card">
+    <!-- Brand -->
+    <div class="brand-section">
+      <div class="brand-logo">
+        <lucide-icon name="bot" [size]="28" color="#FFFFFF"></lucide-icon>
+      </div>
+      <h1 class="brand-name">UMANG</h1>
+      <p class="brand-tagline">Admin Portal</p>
+    </div>
+
+    <div class="card-divider"></div>
+
+    <!-- Form -->
+    <div class="form-section">
+      <h2 class="form-heading">Sign in to your account</h2>
+
+      <form [formGroup]="loginForm" (ngSubmit)="submit()" class="login-form" novalidate>
+
+        <!-- Email -->
+        <div class="field-group">
+          <label class="form-label" for="login-email">Email address</label>
+          <div class="input-wrap">
+            <span class="input-icon-left">
+              <lucide-icon name="mail" [size]="16" color="#94A3B8"></lucide-icon>
+            </span>
+            <input
+              id="login-email"
+              type="email"
+              class="form-input has-icon-left"
+              placeholder="you@example.com"
+              formControlName="Email"
+              autocomplete="email"
+              [class.input-error]="loginForm.get('Email')?.invalid && loginForm.get('Email')?.touched"
+            />
+          </div>
+          <div class="form-error" *ngIf="loginForm.get('Email')?.invalid && loginForm.get('Email')?.touched">
+            <lucide-icon name="alert-triangle" [size]="12" color="#DC2626"></lucide-icon>
+            <span *ngIf="loginForm.get('Email')?.errors?.['required']">Email is required</span>
+            <span *ngIf="loginForm.get('Email')?.errors?.['email']">Enter a valid email address</span>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="field-group">
+          <label class="form-label" for="login-password">Password</label>
+          <div class="input-wrap">
+            <span class="input-icon-left">
+              <lucide-icon name="lock" [size]="16" color="#94A3B8"></lucide-icon>
+            </span>
+            <input
+              id="login-password"
+              [type]="passwordVisible ? 'text' : 'password'"
+              class="form-input has-icon-left has-icon-right"
+              placeholder="Enter your password"
+              formControlName="Password"
+              autocomplete="current-password"
+              [class.input-error]="loginForm.get('Password')?.invalid && loginForm.get('Password')?.touched"
+            />
+            <button type="button" class="input-icon-right pw-toggle" (click)="togglePasswordVisibility()"
+                    [attr.aria-label]="passwordVisible ? 'Hide password' : 'Show password'">
+              <lucide-icon [name]="passwordVisible ? 'eye-off' : 'eye'" [size]="16" color="#94A3B8"></lucide-icon>
+            </button>
+          </div>
+          <div class="form-error" *ngIf="loginForm.get('Password')?.invalid && loginForm.get('Password')?.touched">
+            <lucide-icon name="alert-triangle" [size]="12" color="#DC2626"></lucide-icon>
+            Password is required
+          </div>
+        </div>
+
+        <!-- Error banner -->
+        <div class="error-banner" *ngIf="error">
+          <lucide-icon name="alert-triangle" [size]="16" color="#DC2626"></lucide-icon>
+          <span>{{ error }}</span>
+          <button type="button" class="error-dismiss" (click)="error=''" aria-label="Dismiss error">
+            <lucide-icon name="x" [size]="14" color="#DC2626"></lucide-icon>
+          </button>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn btn-primary btn-lg submit-btn" [disabled]="loading || loginForm.invalid">
+          <lucide-icon *ngIf="loading" name="loader-2" [size]="16" color="#FFFFFF" class="icon-spin"></lucide-icon>
+          <span>{{ loading ? 'Authenticating…' : 'Sign In' }}</span>
+        </button>
+
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="card-footer">
+      <lucide-icon name="shield-check" [size]="13" color="#94A3B8"></lucide-icon>
+      <span>Secured with SSL encryption</span>
+    </div>
+  </div>
+</div>
