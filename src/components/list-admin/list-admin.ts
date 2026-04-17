@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
+import { environment } from '../../environment';
 
 interface Admin {
   _id: string;
@@ -47,7 +48,7 @@ export class ListAdmin implements OnInit, OnDestroy {
   pageSize = 10;
   totalPages = 1;
 
-  private apiUrl = 'http://localhost:8000/api/admin';
+  private apiUrl = `${environment.BASE_API_URL}${environment.ENDPOINTS.ADMIN_BASE}`;
   private destroy$ = new Subject<void>();
 
   constructor(private http: HttpClient, private router: Router) {}

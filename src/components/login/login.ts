@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { LucideAngularModule } from 'lucide-angular';
+import { environment } from '../../environment';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,7 @@ export class Login {
   loading = false;
   passwordVisible = false;
 
-  private PROFILE_URL = 'http://localhost:8000/api/admin/profile';
+  private PROFILE_URL = `${environment.BASE_API_URL}${environment.ENDPOINTS.PROFILE}`;
 
   constructor(
     private fb: FormBuilder,
