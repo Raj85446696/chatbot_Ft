@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
 
-  BASE_API_URL: 'http://98.130.58.81:8000',
+  BASE_API_URL: 'https://98.130.58.81:8000',
 
   ENDPOINTS: {
     ADMIN_BASE: '/api/admin',
